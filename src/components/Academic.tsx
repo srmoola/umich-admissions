@@ -17,20 +17,65 @@ import {
   sophomoregpa,
 } from "../features/jotai";
 import { useEffect, useState, useRef } from "react";
+import {
+  handleGpaChange,
+  handleGradesGPA,
+  handleSatChange,
+  handleActChange,
+  handleClassRankChange,
+  handleCourseRigorChange,
+} from "../features/errors";
 
 export default function AddressForm() {
-  const [, setgpa] = useAtom(gpa);
-  const [, setfreshmangpa] = useAtom(freshmangpa);
-  const [, setsophomoregpa] = useAtom(sophomoregpa);
-  const [, setjuniorgpa] = useAtom(juniorgpa);
-  const [, setsatscore] = useAtom(satscore);
-  const [, setclassrank] = useAtom(classrank);
-  const [, setcourserigor] = useAtom(courserigor);
+  const [gpas, setgpa] = useAtom(gpa);
+  const [fresh, setfreshmangpa] = useAtom(freshmangpa);
+  const [soph, setsophomoregpa] = useAtom(sophomoregpa);
+  const [juni, setjuniorgpa] = useAtom(juniorgpa);
+  const [sat, setsatscore] = useAtom(satscore);
+  const [classr, setclassrank] = useAtom(classrank);
+  const [crig, setcourserigor] = useAtom(courserigor);
   const [pointss, setpoints] = useAtom(points);
   const [gradeinflation, setgradeinflation] = useState<boolean>(false);
   const [ibdiploma, setibdiploma] = useState<boolean>(false);
   const counterRef = useRef(0);
   const ibcounterRef = useRef(0);
+  const [gpaError, setGpaError] = useState(false);
+  const [gpaHelperText, setGpaHelperText] = useState("");
+
+  const [freshmanGpaError, setFreshmanGpaError] = useState(false);
+  const [freshmanGpaHelperText, setFreshmanGpaHelperText] = useState("");
+
+  const [sophomoreGpaError, setSophomoreGpaError] = useState(false);
+  const [sophomoreGpaHelperText, setSophomoreGpaHelperText] = useState("");
+
+  const [juniorGpaError, setJuniorGpaError] = useState(false);
+  const [juniorGpaHelperText, setJuniorGpaHelperText] = useState("");
+
+  const [saterror, setsaterror] = useState(false);
+  const [sathelpertext, setsathelpertext] = useState("");
+
+  const [acterror, setacterror] = useState(false);
+  const [acthelpertext, setacthelpertext] = useState("");
+
+  const [classrankerror, setclassrankerror] = useState(false);
+  const [crhelpertext, setcrhelpertext] = useState("");
+
+  const [courserigorError, setcourserigorError] = useState<boolean>(false);
+  const [courserigorHelperText, setcourserigorHelperText] =
+    useState<string>("");
+
+  const gpaData = {
+    gpa: gpas,
+    freshmanGpa: fresh,
+    sophomoreGpa: soph,
+    juniorGpa: juni,
+    satScore: sat,
+    classRank: classr,
+    courseRigor: crig,
+  };
+
+  console.log(gpaData);
+
   console.log(pointss);
 
   useEffect(() => {
@@ -51,8 +96,51 @@ export default function AddressForm() {
     }
   }, [ibdiploma]);
 
-  //   let items: any[] = [gpas, freshgpa, sophgpa, junigpa, sat, cr, courser];
-  //   console.log(items);
+  const handleGpaChangeWrapper = (value: string) => {
+    handleGpaChange(value, setgpa, setGpaError, setGpaHelperText);
+  };
+
+  const handleGradesGPAWrapper = (value: string, field: string) => {
+    handleGradesGPA(
+      value,
+      field,
+      setfreshmangpa,
+      setFreshmanGpaError,
+      setFreshmanGpaHelperText,
+      setsophomoregpa,
+      setSophomoreGpaError,
+      setSophomoreGpaHelperText,
+      setjuniorgpa,
+      setJuniorGpaError,
+      setJuniorGpaHelperText
+    );
+  };
+
+  const handleSatChangeWrapper = (value: string) => {
+    handleSatChange(value, setsaterror, setsathelpertext, setsatscore);
+  };
+
+  const handleActChangeWrapper = (value: string) => {
+    handleActChange(value, setacterror, setacthelpertext);
+  };
+
+  const handleClassRankChangeWrapper = (value: string) => {
+    handleClassRankChange(
+      value,
+      setclassrankerror,
+      setcrhelpertext,
+      setclassrank
+    );
+  };
+
+  const handleCourseRigorChangeWrapper = (value: string) => {
+    handleCourseRigorChange(
+      value,
+      setcourserigorError,
+      setcourserigorHelperText,
+      setcourserigor
+    );
+  };
 
   return (
     <>
@@ -73,23 +161,30 @@ export default function AddressForm() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Tooltip title="UMich recalculates your highschool GPA. Go to umich.uloop.com/gpa-calculator if you need your UMich GPA.">
+                  <Tooltip title="UMich recalculates your high school GPA. Go to umich.uloop.com/gpa-calculator if you need your UMich GPA.">
                     <HelpIcon sx={{ cursor: "pointer" }} />
                   </Tooltip>
                 </InputAdornment>
               ),
+              inputProps: {
+                step: "0.01",
+                min: "0",
+                max: "4",
+                pattern: "^[0-4](\\.\\d{1,2})?$",
+              },
             }}
-            onChange={(e) => setgpa(e.target.value)}
+            error={gpaError}
+            helperText={gpaHelperText}
+            onChange={(e) => handleGpaChangeWrapper(e.target.value)}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="weightedgpa"
             name="weightedgpa"
-            label="Weighted GPA"
+            label="Weighted GPA (optional)"
             fullWidth
-            autoComplete="family-name"
+            autoComplete="none"
             variant="standard"
           />
         </Grid>
@@ -100,9 +195,11 @@ export default function AddressForm() {
             name="freshman"
             label="Freshman Year Unweighted GPA"
             fullWidth
-            autoComplete="shipping address-line1"
+            autoComplete="none"
             variant="standard"
-            onChange={(e) => setfreshmangpa(e.target.value)}
+            error={freshmanGpaError}
+            helperText={freshmanGpaHelperText}
+            onChange={(e) => handleGradesGPAWrapper(e.target.value, "freshman")}
           />
         </Grid>
         <Grid item xs={12}>
@@ -112,9 +209,13 @@ export default function AddressForm() {
             name="sophomoregpa"
             label="Sophomore Year Unweighted GPA"
             fullWidth
-            autoComplete="shipping address-line1"
+            autoComplete="none"
             variant="standard"
-            onChange={(e) => setsophomoregpa(e.target.value)}
+            error={sophomoreGpaError}
+            helperText={sophomoreGpaHelperText}
+            onChange={(e) =>
+              handleGradesGPAWrapper(e.target.value, "sophomore")
+            }
           />
         </Grid>
         <Grid item xs={12}>
@@ -124,11 +225,14 @@ export default function AddressForm() {
             name="juniorgpa"
             label="Junior Year Unweighted GPA"
             fullWidth
-            autoComplete="shipping address-line1"
+            autoComplete="none"
             variant="standard"
-            onChange={(e) => setjuniorgpa(e.target.value)}
+            error={juniorGpaError}
+            helperText={juniorGpaHelperText}
+            onChange={(e) => handleGradesGPAWrapper(e.target.value, "junior")}
           />
         </Grid>
+
         <Grid item xs={12} sm={6}>
           <TextField
             required
@@ -136,10 +240,12 @@ export default function AddressForm() {
             name="sat"
             label="SAT Score"
             fullWidth
-            autoComplete="shipping postal-code"
+            autoComplete="none"
             variant="standard"
-            type="number"
-            onChange={(e) => setsatscore(Number(e.target.value))}
+            type="text"
+            error={saterror}
+            helperText={sathelpertext}
+            onChange={(e) => handleSatChangeWrapper(e.target.value)}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -148,8 +254,12 @@ export default function AddressForm() {
             name="act"
             label="ACT Score (optional)"
             fullWidth
-            autoComplete="shipping postal-code"
+            autoComplete="none"
             variant="standard"
+            type="text"
+            error={acterror}
+            helperText={acthelpertext}
+            onChange={(e) => handleActChangeWrapper(e.target.value)}
           />
         </Grid>
         <Grid item xs={12}>
@@ -160,9 +270,11 @@ export default function AddressForm() {
             label="Class Rank"
             placeholder="Enter as fraction (i.e. 1/400)"
             fullWidth
-            autoComplete="shipping country"
+            autoComplete="none"
             variant="standard"
-            onChange={(e) => setclassrank(e.target.value)}
+            error={classrankerror}
+            helperText={crhelpertext}
+            onChange={(e) => handleClassRankChangeWrapper(e.target.value)}
           />
         </Grid>
         <Grid item xs={12}>
@@ -189,12 +301,14 @@ export default function AddressForm() {
             autoComplete="none"
             variant="standard"
             placeholder="Total # of AP/IB/Dual Enrollment Classes"
-            type="number"
-            onChange={(e) => setcourserigor(Number(e.target.value))}
+            type="text"
+            error={courserigorError}
+            helperText={courserigorHelperText}
+            onChange={(e) => handleCourseRigorChangeWrapper(e.target.value)}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Tooltip title="UMich recalculates your highschool GPA. Go to umich.uloop.com/gpa-calculator if you need your UMich GPA.">
+                  <Tooltip title="UMich recalculates your high school GPA. Go to umich.uloop.com/gpa-calculator if you need your UMich GPA.">
                     <HelpIcon sx={{ cursor: "pointer" }} />
                   </Tooltip>
                 </InputAdornment>

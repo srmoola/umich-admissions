@@ -41,13 +41,12 @@ const extrac: { value: string; points: number }[] = [
 ];
 
 export default function PaymentForm() {
-  const [pointss, setPoints] = useAtom(points);
+  const [, setPoints] = useAtom(points);
   const [checked, setChecked] = useState("");
   const [umichcheck, setumichcheck] = useState("");
   const [optional, setoptional] = useState("");
   const [lorcheck, setlorcheck] = useState("");
   const [ecs, setecs] = useState("");
-  console.log(pointss);
 
   const handleToggle = (value: string, points: number) => () => {
     if (value === checked) {

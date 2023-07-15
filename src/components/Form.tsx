@@ -1,4 +1,3 @@
-import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -12,6 +11,19 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddressForm from "./Academic";
 import PaymentForm from "./NonAcademic";
 import Review from "./External";
+import { useAtom } from "jotai";
+import {
+  gpa,
+  freshmangpa,
+  sophomoregpa,
+  juniorgpa,
+  satscore,
+  classrank,
+  courserigor,
+} from "../features/jotai";
+import { useState } from "react";
+import ConfirmCalc from "./ConfirmCalc";
+import ShowResults from "./ShowResults";
 
 const steps = ["Academic Factors", "Non-Academic Factors", "External Factors"];
 
@@ -32,21 +44,44 @@ function getStepContent(step: number) {
 const defaultTheme = createTheme();
 
 export default function Form() {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+
+  const [gpas] = useAtom(gpa);
+  const [fresh] = useAtom(freshmangpa);
+  const [soph] = useAtom(sophomoregpa);
+  const [juni] = useAtom(juniorgpa);
+  const [sat] = useAtom(satscore);
+  const [classr] = useAtom(classrank);
+  const [crig] = useAtom(courserigor);
+
+  const gpaData: number[] = [gpas, fresh, soph, juni, sat, classr, crig];
 
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    let isFieldEmpty = false;
+
+    gpaData.forEach((element) => {
+      if (isNaN(element)) {
+        isFieldEmpty = true;
+        return;
+      }
+    });
+
+    if (isFieldEmpty) {
+      alert("One or more required fields are empty!");
+    } else {
+      setActiveStep((prev) => prev + 1);
+    }
   };
 
   const handleBack = () => {
-    setActiveStep(activeStep - 1);
+    setActiveStep((prev) => prev - 1);
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
 
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+      <Container component="main" maxWidth="xl" sx={{ mb: 4 }}>
         <Paper
           variant="outlined"
           sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
@@ -63,17 +98,30 @@ export default function Form() {
           </Stepper>
           {activeStep === steps.length ? (
             <>
-              <div>Hello</div>
+              <ConfirmCalc />
+              <ShowResults />
+              <Button onClick={() => window.location.reload()}>Restart</Button>
             </>
           ) : (
             <>
               {getStepContent(activeStep)}
-              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: "20px",
+                }}
+              >
+                {activeStep === 2 ? (
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleBack}
+                    sx={{ mt: 3 }}
+                  >
                     Back
                   </Button>
-                )}
+                ) : null}
                 <Button
                   variant="contained"
                   onClick={handleNext}

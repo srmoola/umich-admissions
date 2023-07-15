@@ -61,8 +61,7 @@ export default function Review() {
   const [hooks, setHooks] = useState<string[]>([]);
   const [disipline, setDisipline] = useState<string[]>([]);
 
-  const [pointsValue, setPointsValue] = useAtom(points);
-  console.log(pointsValue);
+  const [, setPointsValue] = useAtom(points);
 
   const handleToggle = (value: string, points: number) => () => {
     if (value === checked) {

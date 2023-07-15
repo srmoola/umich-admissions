@@ -27,14 +27,14 @@ import {
 } from "../features/errors";
 
 export default function AddressForm() {
-  const [gpas, setgpa] = useAtom(gpa);
-  const [fresh, setfreshmangpa] = useAtom(freshmangpa);
-  const [soph, setsophomoregpa] = useAtom(sophomoregpa);
-  const [juni, setjuniorgpa] = useAtom(juniorgpa);
-  const [sat, setsatscore] = useAtom(satscore);
-  const [classr, setclassrank] = useAtom(classrank);
-  const [crig, setcourserigor] = useAtom(courserigor);
-  const [pointss, setpoints] = useAtom(points);
+  const [, setgpa] = useAtom(gpa);
+  const [, setfreshmangpa] = useAtom(freshmangpa);
+  const [, setsophomoregpa] = useAtom(sophomoregpa);
+  const [, setjuniorgpa] = useAtom(juniorgpa);
+  const [, setsatscore] = useAtom(satscore);
+  const [, setclassrank] = useAtom(classrank);
+  const [, setcourserigor] = useAtom(courserigor);
+  const [, setpoints] = useAtom(points);
   const [gradeinflation, setgradeinflation] = useState<boolean>(false);
   const [ibdiploma, setibdiploma] = useState<boolean>(false);
   const counterRef = useRef(0);
@@ -63,20 +63,6 @@ export default function AddressForm() {
   const [courserigorError, setcourserigorError] = useState<boolean>(false);
   const [courserigorHelperText, setcourserigorHelperText] =
     useState<string>("");
-
-  const gpaData = {
-    gpa: gpas,
-    freshmanGpa: fresh,
-    sophomoreGpa: soph,
-    juniorGpa: juni,
-    satScore: sat,
-    classRank: classr,
-    courseRigor: crig,
-  };
-
-  console.log(gpaData);
-
-  console.log(pointss);
 
   useEffect(() => {
     if (gradeinflation) {

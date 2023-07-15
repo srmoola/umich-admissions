@@ -1,14 +1,13 @@
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import Checkbox from "@mui/material/Checkbox";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { points } from "../features/jotai";
+import QualityEssays from "./nonacademicfactors/QualityEssays";
+import WhyUmich from "./nonacademicfactors/WhyUmich";
+import OptionalEssay from "./nonacademicfactors/OptionalEssay";
+import Lors from "./nonacademicfactors/Lors";
+import Ecs from "./nonacademicfactors/Ecs";
 
 const character: { value: string; points: number }[] = [
   { value: "Very Strong", points: 40 },
@@ -130,103 +129,33 @@ export default function PaymentForm() {
           <Typography variant="h6" gutterBottom>
             Quality of character based on Essays, Best Guess
           </Typography>
-          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            {character.map((option) => {
-              const labelId = `checkbox-list-label-${option}`;
-
-              return (
-                <ListItem key={option.value} disablePadding>
-                  <ListItemButton
-                    role={undefined}
-                    onClick={handleToggle(option.value, option.points)}
-                    dense
-                  >
-                    <ListItemIcon>
-                      <Checkbox
-                        edge="start"
-                        checked={option.value === checked}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ "aria-labelledby": labelId }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      id={labelId}
-                      primary={option.value + " Qualities"}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
+          <QualityEssays
+            handleToggle={handleToggle}
+            checked={checked}
+            character={character}
+          />
         </Grid>
         <Grid item xs={12}>
           <Grid sx={{ mt: 6 }} item xs={12}>
             <Typography variant="h6" gutterBottom>
               Why UMich Essay Rating, Best Guess
             </Typography>
-            <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-              {whyumich.map((option) => {
-                const labelId = `checkbox-list-label-${option.value}`;
-                return (
-                  <ListItem key={option.value} disablePadding>
-                    <ListItemButton
-                      role={undefined}
-                      onClick={handleumichcheck(option.value, option.points)}
-                      dense
-                    >
-                      <ListItemIcon>
-                        <Checkbox
-                          edge="start"
-                          checked={option.value === umichcheck}
-                          tabIndex={-1}
-                          disableRipple
-                          inputProps={{ "aria-labelledby": labelId }}
-                        />
-                      </ListItemIcon>
-                      <ListItemText
-                        id={labelId}
-                        primary={option.value + " Qualities"}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
-            </List>
+            <WhyUmich
+              handleumichcheck={handleumichcheck}
+              umichcheck={umichcheck}
+              whyumich={whyumich}
+            />
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h6" gutterBottom>
             Optional Essay
           </Typography>
-          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            {optionalessay.map((option) => {
-              const labelId = `checkbox-list-label-${option.value}`;
-              return (
-                <ListItem key={option.value} disablePadding>
-                  <ListItemButton
-                    role={undefined}
-                    onClick={optionalessaycheck(option.value, option.points)}
-                    dense
-                  >
-                    <ListItemIcon>
-                      <Checkbox
-                        edge="start"
-                        checked={option.value === optional}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ "aria-labelledby": labelId }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      id={labelId}
-                      primary={option.value + " Extenuating Circumstances"}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
+          <OptionalEssay
+            optional={optional}
+            optionalessay={optionalessay}
+            optionalessaycheck={optionalessaycheck}
+          />
           <Typography>
             Severe Examples: Cancer, Sexual Abuse, Homelessness, etc
           </Typography>
@@ -239,64 +168,17 @@ export default function PaymentForm() {
           <Typography variant="h6" gutterBottom>
             Letters of Recommendation
           </Typography>
-          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            {lors.map((option) => {
-              const labelId = `checkbox-list-label-${option.value}`;
-              return (
-                <ListItem key={option.value} disablePadding>
-                  <ListItemButton
-                    role={undefined}
-                    onClick={handlelorcheck(option.value, option.points)}
-                    dense
-                  >
-                    <ListItemIcon>
-                      <Checkbox
-                        edge="start"
-                        checked={option.value === lorcheck}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ "aria-labelledby": labelId }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText id={labelId} primary={option.value} />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
+          <Lors
+            lorcheck={lorcheck}
+            lors={lors}
+            handlelorcheck={handlelorcheck}
+          />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h6" gutterBottom>
             Extracurriculars
           </Typography>
-          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            {extrac.map((option) => {
-              const labelId = `checkbox-list-label-${option.value}`;
-              return (
-                <ListItem key={option.value} disablePadding>
-                  <ListItemButton
-                    role={undefined}
-                    onClick={handleeccheck(option.value, option.points)}
-                    dense
-                  >
-                    <ListItemIcon>
-                      <Checkbox
-                        edge="start"
-                        checked={option.value === ecs}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ "aria-labelledby": labelId }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      id={labelId}
-                      primary={option.value + " Involved"}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
+          <Ecs handleeccheck={handleeccheck} extrac={extrac} ecs={ecs} />
           <Typography>
             Very Involved: Multiple Leadership Roles, National Awards, Carnegie
             Hall, Very Strong Extracurriculars, etc

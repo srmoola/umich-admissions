@@ -25,3 +25,20 @@ export const gpaRanges: {
   { range: [3.0, 3.05], points: 0 },
   { range: [0.0, 2.9], points: -50 },
 ];
+
+export const satRanges: {
+  range: number[];
+  points: number;
+}[] = [
+  { range: [1550, 1600], points: 10 },
+  { range: [1500, 1549], points: 5 },
+  { range: [1450, 1499], points: 2 },
+  { range: [1400, 1449], points: 0 },
+  { range: [1350, 1399], points: -4 },
+  { range: [1300, 1349], points: -8 },
+  { range: [1250, 1299], points: -14 },
+  { range: [1200, 1249], points: -20 },
+  { range: [1150, 1199], points: -27 },
+  { range: [1100, 1149], points: -35 },
+  { range: [0, 1099], points: -50 },
+];

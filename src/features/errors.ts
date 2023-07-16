@@ -92,7 +92,8 @@ export const handleSatChange = (
 export const handleActChange = (
   value: string,
   setacterror: Function,
-  setacthelpertext: Function
+  setacthelpertext: Function,
+  setACT: Function
 ) => {
   const numvalue: number = Number(value);
 
@@ -100,6 +101,7 @@ export const handleActChange = (
     setacterror(true);
     setacthelpertext("Please enter a valid ACT Score");
   } else {
+    setACT(numvalue);
     setacterror(false);
     setacthelpertext("");
   }
@@ -137,16 +139,48 @@ export const handleCourseRigorChange = (
   setcourserigorHelperText: Function,
   setcourserigor: Function
 ) => {
-  const numValue = Number(value);
-
-  if (isNaN(numValue) || numValue < 0 || numValue > 24) {
+  if (!value.includes("/")) {
     setcourserigorError(true);
     setcourserigorHelperText(
-      "Please enter a valid number of classes between 0 and 24"
+      "Please enter (courses taken) / (courses offered). If you don't know the amount of APs your school offers use the default value of 15"
     );
-  } else {
-    setcourserigor(numValue);
+    return;
+  }
+
+  const parts = value.split("/");
+  const numerator: number = parseInt(parts[0].trim(), 10);
+  const denominator: number = parseInt(parts[1].trim(), 10);
+
+  if (isNaN(numerator) || isNaN(denominator)) {
+    setcourserigorError(true);
+    setcourserigorHelperText(
+      "Please enter (courses taken) / (courses offered). If you don't know the amount of APs your school offers use the default value of 15"
+    );
+    return;
+  }
+
+  if (isNaN(numerator / denominator)) {
+    setcourserigor(0);
     setcourserigorError(false);
     setcourserigorHelperText("");
+    return;
   }
+
+  if (numerator > denominator) {
+    setcourserigorError(true);
+    setcourserigorHelperText("This does not make sense.");
+    return;
+  }
+
+  if (numerator > 24) {
+    setcourserigorError(true);
+    setcourserigorHelperText("You did not take that many classes.");
+    return;
+  }
+
+  const classpercent: number = Math.floor((numerator / denominator) * 100);
+
+  setcourserigor(classpercent);
+  setcourserigorError(false);
+  setcourserigorHelperText("");
 };

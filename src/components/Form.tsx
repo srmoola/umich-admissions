@@ -17,7 +17,6 @@ import {
   freshmangpa,
   sophomoregpa,
   juniorgpa,
-  satscore,
   classrank,
   courserigor,
 } from "../features/jotai";
@@ -50,11 +49,11 @@ export default function Form() {
   const [fresh] = useAtom(freshmangpa);
   const [soph] = useAtom(sophomoregpa);
   const [juni] = useAtom(juniorgpa);
-  const [sat] = useAtom(satscore);
+
   const [classr] = useAtom(classrank);
   const [crig] = useAtom(courserigor);
 
-  const gpaData: number[] = [gpas, fresh, soph, juni, sat, classr, crig];
+  const gpaData: number[] = [gpas, fresh, soph, juni, classr, crig];
 
   const handleNext = () => {
     let isFieldEmpty = false;

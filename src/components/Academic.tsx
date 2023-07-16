@@ -7,6 +7,7 @@ import { InputAdornment, Tooltip } from "@mui/material";
 import HelpIcon from "@mui/icons-material/Help";
 import { useAtom } from "jotai";
 import {
+  actscore,
   classrank,
   courserigor,
   freshmangpa,
@@ -35,6 +36,7 @@ export default function AddressForm() {
   const [, setclassrank] = useAtom(classrank);
   const [, setcourserigor] = useAtom(courserigor);
   const [, setpoints] = useAtom(points);
+  const [, setACT] = useAtom(actscore);
   const [gradeinflation, setgradeinflation] = useState<boolean>(false);
   const [ibdiploma, setibdiploma] = useState<boolean>(false);
   const counterRef = useRef(0);
@@ -107,7 +109,7 @@ export default function AddressForm() {
   };
 
   const handleActChangeWrapper = (value: string) => {
-    handleActChange(value, setacterror, setacthelpertext);
+    handleActChange(value, setacterror, setacthelpertext, setACT);
   };
 
   const handleClassRankChangeWrapper = (value: string) => {
@@ -139,11 +141,11 @@ export default function AddressForm() {
             required
             id="unweigtedgpa"
             name="unweigtedgpa"
-            label="Unweighted GPA"
+            label="Cumulative Unweighted GPA"
             fullWidth
             autoComplete="none"
             variant="standard"
-            placeholder="(A+, A, A-) all equal A"
+            placeholder="(A+, A, A-) all equal A, etc."
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -221,10 +223,9 @@ export default function AddressForm() {
 
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="sat"
             name="sat"
-            label="SAT Score"
+            label="SAT Score (optional)"
             fullWidth
             autoComplete="none"
             variant="standard"
@@ -271,6 +272,21 @@ export default function AddressForm() {
             label="Check this box if your school has grade inflation (Important)"
             onChange={() => setgradeinflation(!gradeinflation)}
           />
+          <Typography sx={{ mt: 2, fontSize: "12px" }}>
+            * Grade inflation refers to where the average grades awarded to
+            students increase over time, without a proportional increase in
+            their actual learning or academic performance. In other words, it
+            implies that students are receiving higher grades compared to
+            previous years, potentially making it easier for them to achieve
+            higher marks.
+            <br />
+            <br />
+            *Example: Increasingly higher percentages of students receiving top
+            grades (e.g., A or A+). For instance, if historically only a small
+            percentage of students received an A grade, but over time, a
+            significant portion of the student population starts receiving A
+            grades, it suggests grade inflation.
+          </Typography>
         </Grid>
       </Grid>
       <Typography sx={{ mt: 4 }} variant="h6" gutterBottom>
@@ -282,19 +298,20 @@ export default function AddressForm() {
             required
             id="courserigor"
             name="courserigor"
-            label="Total # of AP/IB/Dual Enrollment Classes before senior year"
+            label="Total # of AP/IB/Dual Enrollment Classes before Second Sem. Senior Year"
             fullWidth
             autoComplete="none"
             variant="standard"
-            placeholder="Total # of AP/IB/Dual Enrollment Classes"
+            placeholder="(total courses taken) / (APs offered)"
             type="text"
             error={courserigorError}
             helperText={courserigorHelperText}
             onChange={(e) => handleCourseRigorChangeWrapper(e.target.value)}
+            defaultValue={"/15"}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Tooltip title="UMich recalculates your high school GPA. Go to umich.uloop.com/gpa-calculator if you need your UMich GPA.">
+                  <Tooltip title="Most colleges, including UMich takes into account how many rigorous courses are given at your school, so this calculator will also consider it">
                     <HelpIcon sx={{ cursor: "pointer" }} />
                   </Tooltip>
                 </InputAdornment>

@@ -14,6 +14,7 @@ const character: { value: string; points: number }[] = [
   { value: "Disadvantaged", points: 16 },
   { value: "In State Feeder", points: 6 },
   { value: "Out of State feeder", points: 3 },
+  { value: "None", points: 0 },
 ];
 
 const whyumich: { value: string; points: number }[] = [

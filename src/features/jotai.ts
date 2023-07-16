@@ -15,3 +15,5 @@ export const satscore = atom<number>(NaN);
 export const classrank = atom<number>(NaN);
 
 export const courserigor = atom<number>(NaN);
+
+export const actscore = atom<number>(NaN);

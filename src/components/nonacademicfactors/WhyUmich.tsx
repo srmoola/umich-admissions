@@ -38,10 +38,7 @@ const WhyUmich = ({ whyumich, handleumichcheck, umichcheck }: Props) => {
                     inputProps={{ "aria-labelledby": labelId }}
                   />
                 </ListItemIcon>
-                <ListItemText
-                  id={labelId}
-                  primary={option.value + " Qualities"}
-                />
+                <ListItemText id={labelId} primary={option.value} />
               </ListItemButton>
             </ListItem>
           );

@@ -99,7 +99,13 @@ export default function Form() {
             <>
               <ConfirmCalc />
               <ShowResults />
-              <Button onClick={() => window.location.reload()}>Restart</Button>
+              <Button
+                sx={{ mt: 5, fontSize: "24px", height: "100px" }}
+                fullWidth
+                onClick={() => window.location.reload()}
+              >
+                Restart Calculator
+              </Button>
             </>
           ) : (
             <>
